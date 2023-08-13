@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\v1\Customer\AuthController as CustomerAuthController;
+use App\Http\Controllers\API\v1\Customer\CustomerAddressController;
 use App\Http\Controllers\API\v1\Seller\AuthController as SellerAuthController;
 use App\Http\Controllers\API\v1\Admin\AuthController as AdminAuthController;
 
@@ -24,6 +25,11 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::group(['prefix' => 'v1/customer'], function(){
     Route::post('/register', [CustomerAuthController::class,'register']);
     Route::post('/login',[CustomerAuthController::class,'login']);
+
+    Route::group(['middleware' => ['auth:customer-api']], function(){
+        Route::resource('customer_addresses', CustomerAddressController::class);
+        Route::patch('customer_addresses/{id}/selected/',[CustomerAddressController::class,'selected']);
+    });
 });
 
 Route::group(['prefix' => 'v1/seller'], function(){
