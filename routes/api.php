@@ -28,6 +28,7 @@ Route::group(['prefix' => 'v1/customer'], function(){
 
     Route::group(['middleware' => ['auth:customer-api']], function(){
         Route::resource('customer_addresses', CustomerAddressController::class);
+        Route::patch('customer_addresses/{id}/selected/',[CustomerAddressController::class,'selected']);
     });
 });
 
