@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\v1\Customer\AuthController as CustomerAuthController;
 use App\Http\Controllers\API\v1\Customer\CustomerAddressController;
+use App\Http\Controllers\API\v1\Customer\CustomerWalletController;
 use App\Http\Controllers\API\v1\Seller\AuthController as SellerAuthController;
 use App\Http\Controllers\API\v1\Admin\AuthController as AdminAuthController;
 
@@ -29,6 +30,7 @@ Route::group(['prefix' => 'v1/customer'], function(){
     Route::group(['middleware' => ['auth:customer-api']], function(){
         Route::resource('customer_addresses', CustomerAddressController::class);
         Route::patch('customer_addresses/{id}/selected/',[CustomerAddressController::class,'selected']);
+        Route::resource('wallets',CustomerWalletController::class);
     });
 });
 
