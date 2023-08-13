@@ -38,4 +38,25 @@ class AuthController extends Controller
             return response()->json(['seller' => $seller,'token' => $token->plainTextToken]);
         }
     }
+
+    public function login(Request $request)
+    {
+        $validated_data = $this->validate($request, 
+            [   
+                'email' => ['required'],
+                'password' => ['required']
+            ],['email.exists' => 'This email does not exists']
+        );
+        $seller = Seller::where('email',$request->get('email'))->first();
+        if($seller){
+            if(Hash::check($validated_data['password'], $seller->password)){
+                $token = $seller->createToken('plaintexttoken');
+                return response()->json(['seller' => $seller, 'token' => $token->plainTextToken]);
+            } else {
+                return response()->json(['error' => 'Password is incorrect']);
+            }
+        } else {
+            return response()->json(['email' => 'This email does not exists!']);
+        }
+    }
 }
