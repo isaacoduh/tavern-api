@@ -49,6 +49,16 @@ return [
             'provider' => 'customers',
             'hash' => false,
         ],
+        'seller' => [
+            'driver' => 'session',
+            'provider' => 'sellers'
+        ],
+        'seller-api' => [
+            'driver' => 'passport',
+            'provider' => 'sellers',
+            'hash' => false
+        ],
+
     ],
 
     /*
@@ -77,6 +87,10 @@ return [
             'driver' => 'eloquent',
             'model' => App\Models\Customer::class,
         ],
+        'sellers' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Seller::class
+        ]
         // 'users' => [
         //     'driver' => 'database',
         //     'table' => 'users',
@@ -105,6 +119,12 @@ return [
             'expire' => 60,
             'throttle' => 60,
         ],
+        'sellers' => [
+            'provider' => 'sellers',
+            'table' => 'password_resets',
+            'expire' => 60,
+            'throttle' => 60
+        ]
         // 'users' => [
         //     'provider' => 'users',
         //     'table' => 'password_resets',
@@ -125,5 +145,4 @@ return [
     */
 
     'password_timeout' => 10800,
-
 ];
