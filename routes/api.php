@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\v1\Customer\AuthController as CustomerAuthController;
 use App\Http\Controllers\API\v1\Seller\AuthController as SellerAuthController;
+use App\Http\Controllers\API\v1\Admin\AuthController as AdminAuthController;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,4 +29,8 @@ Route::group(['prefix' => 'v1/customer'], function(){
 Route::group(['prefix' => 'v1/seller'], function(){
     Route::post('/register', [SellerAuthController::class,'register']);
     Route::post('/login',[SellerAuthController::class,'login']);
+});
+
+Route::group(['prefix' => 'v1/admin'], function(){
+    Route::post('/login',[AdminAuthController::class,'login']);
 });
