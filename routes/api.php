@@ -7,6 +7,7 @@ use App\Http\Controllers\API\v1\Customer\CustomerAddressController;
 use App\Http\Controllers\API\v1\Customer\CustomerWalletController;
 use App\Http\Controllers\API\v1\Seller\AuthController as SellerAuthController;
 use App\Http\Controllers\API\v1\Seller\ProfileController as SellerProfileController;
+use App\Http\Controllers\API\v1\Seller\ShopController as SellerShopController;
 use App\Http\Controllers\API\v1\Admin\AuthController as AdminAuthController;
 
 /*
@@ -40,6 +41,8 @@ Route::group(['prefix' => 'v1/seller'], function(){
     Route::post('/login',[SellerAuthController::class,'login']);
     Route::group(['middleware' => ['auth:seller-api']], function(){
         Route::get('/profile', [SellerProfileController::class,'show']);
+        Route::post('/shops',[SellerShopController::class,'store']);
+        Route::get('/shops', [SellerShopController::class,'show']);
     });
 });
 

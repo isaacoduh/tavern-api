@@ -14,4 +14,9 @@ class Seller extends Authenticatable
     protected $guarded = [];
     protected $hidden = ['password','remember_token'];
     protected $casts = ['email_verified_at' => 'datetime','active' => 'bool'];
+
+    public function shop()
+    {
+        return $this->belongsTo(Shop::class);
+    }
 }
