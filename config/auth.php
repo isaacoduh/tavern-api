@@ -54,7 +54,7 @@ return [
             'provider' => 'sellers'
         ],
         'seller-api' => [
-            'driver' => 'passport',
+            'driver' => 'sanctum',
             'provider' => 'sellers',
             'hash' => false
         ],

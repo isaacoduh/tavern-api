@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Shop;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -29,7 +30,7 @@ return new class extends Migration
             $table->string('account_number')->nullable();
 
             // seller role
-            // shop class
+            $table->foreignIdFor(Shop::class)->nullable()->constrained()->nullOnDelete();
 
             $table->timestamps();
         });
