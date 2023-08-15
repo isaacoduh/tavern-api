@@ -11,6 +11,7 @@ use App\Http\Controllers\API\v1\Seller\ShopController as SellerShopController;
 use App\Http\Controllers\API\v1\Admin\AuthController as AdminAuthController;
 use App\Http\Controllers\API\v1\Admin\CustomerController as AdminCustomerController;
 use App\Http\Controllers\API\v1\Admin\SellerController as AdminSellerController;
+use App\Http\Controllers\API\v1\Admin\ShopController as AdminShopController;
 
 /*
 |--------------------------------------------------------------------------
@@ -54,5 +55,7 @@ Route::group(['prefix' => 'v1/admin'], function(){
         Route::resource('customers', AdminCustomerController::class);
         Route::get('sellers/all_owners',[AdminSellerController::class,'all_owners']);
         Route::resource('sellers', AdminSellerController::class);
+        Route::resource('shops', AdminShopController::class);
+        Route::get('shops/{id}/approve',[AdminShopController::class, 'approve']);
     });
 });

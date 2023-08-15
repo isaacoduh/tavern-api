@@ -21,4 +21,6 @@ class CustomerController extends Controller
     }
 
     // TODO: Create an Endpoint to create a customer from ADMIN
+    // TODO: Create an Endpoint to update a User from ADMIN
+    // TODO: Create an Endpoint to delete a user and or delete avatar
 }
