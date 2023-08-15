@@ -63,7 +63,7 @@ return [
             'provider' => 'admins',
         ],
         'admin-api' => [
-            'driver' => 'passport',
+            'driver' => 'sanctum',
             'provider' => 'admins',
             'hash' => false,
         ],
