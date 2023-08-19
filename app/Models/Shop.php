@@ -26,6 +26,11 @@ class Shop extends Model
         return $this->hasOne(Seller::class)->where('is_owner',true);
     }
 
+    public function products()
+    {
+        return $this->hasMany(Product::class);
+    }
+
     public function attachOwner($seller_id = null)
     {
         if(isset($seller_id)){
