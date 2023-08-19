@@ -13,6 +13,7 @@ use App\Http\Controllers\API\v1\Admin\AuthController as AdminAuthController;
 use App\Http\Controllers\API\v1\Admin\CustomerController as AdminCustomerController;
 use App\Http\Controllers\API\v1\Admin\SellerController as AdminSellerController;
 use App\Http\Controllers\API\v1\Admin\ShopController as AdminShopController;
+use App\Http\Controllers\API\v1\Admin\CategoryController as AdminCategoryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -59,5 +60,8 @@ Route::group(['prefix' => 'v1/admin'], function(){
         Route::resource('sellers', AdminSellerController::class);
         Route::resource('shops', AdminShopController::class);
         Route::get('shops/{id}/approve',[AdminShopController::class, 'approve']);
+
+        Route::resource('categories', AdminCategoryController::class);
+        // remove image route
     });
 });
