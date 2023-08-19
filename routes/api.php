@@ -9,6 +9,7 @@ use App\Http\Controllers\API\v1\Customer\ShopController as CustomerShopControlle
 use App\Http\Controllers\API\v1\Customer\ProductController as CustomerProductController;
 use App\Http\Controllers\API\v1\Customer\CategoryController as CustomerCategoryController;
 use App\Http\Controllers\API\v1\Customer\SearchController as CustomerSearchController;
+use App\Http\Controllers\API\v1\Customer\CartController;
 use App\Http\Controllers\API\v1\Seller\AuthController as SellerAuthController;
 use App\Http\Controllers\API\v1\Seller\ProfileController as SellerProfileController;
 use App\Http\Controllers\API\v1\Seller\ShopController as SellerShopController;
@@ -55,6 +56,8 @@ Route::group(['prefix' => 'v1/customer'], function(){
         Route::resource('customer_addresses', CustomerAddressController::class);
         Route::patch('customer_addresses/{id}/selected/',[CustomerAddressController::class,'selected']);
         Route::resource('wallets',CustomerWalletController::class);
+
+        Route::resource('carts',CartController::class);
     });
 });
 
@@ -73,6 +76,7 @@ Route::group(['prefix' => 'v1/seller'], function(){
         // product images
         // product options
         // product reviews
+
     });
 });
 
