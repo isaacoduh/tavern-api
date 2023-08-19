@@ -8,6 +8,7 @@ use App\Http\Controllers\API\v1\Customer\CustomerWalletController;
 use App\Http\Controllers\API\v1\Seller\AuthController as SellerAuthController;
 use App\Http\Controllers\API\v1\Seller\ProfileController as SellerProfileController;
 use App\Http\Controllers\API\v1\Seller\ShopController as SellerShopController;
+use App\Http\Controllers\API\v1\Seller\CategoryController as SellerCategoryController;
 use App\Http\Controllers\API\v1\Admin\AuthController as AdminAuthController;
 use App\Http\Controllers\API\v1\Admin\CustomerController as AdminCustomerController;
 use App\Http\Controllers\API\v1\Admin\SellerController as AdminSellerController;
@@ -46,6 +47,7 @@ Route::group(['prefix' => 'v1/seller'], function(){
         Route::get('/profile', [SellerProfileController::class,'show']);
         Route::post('/shops',[SellerShopController::class,'store']);
         Route::get('/shops', [SellerShopController::class,'show']);
+        Route::resource('categories', SellerCategoryController::class)->only(['index']);
     });
 });
 
