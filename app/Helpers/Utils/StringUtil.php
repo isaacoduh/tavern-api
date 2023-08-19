@@ -4,7 +4,7 @@ namespace App\Helpers\Utils;
 
 use Illuminate\Support\Str;
 
-class StringUtils
+class StringUtil
 {
     static function generateSlugFromText($text, string $divider = '-')
     {

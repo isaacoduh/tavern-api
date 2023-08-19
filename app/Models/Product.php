@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Helpers\Utils\StringUtils;
+use App\Helpers\Utils\StringUtil;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -48,7 +48,7 @@ class Product extends Model
     {
         parent::boot();
         self::creating(function ($model){
-            $model->slug = StringUtils::generateSlugFromText($model->name);
+            $model->slug = StringUtil::generateSlugFromText($model->name);
         });
     }
 
