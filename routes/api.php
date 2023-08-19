@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\v1\Customer\AuthController as CustomerAuthController;
 use App\Http\Controllers\API\v1\Customer\CustomerAddressController;
 use App\Http\Controllers\API\v1\Customer\CustomerWalletController;
+use App\Http\Controllers\API\v1\Customer\ShopController as CustomerShopController;
 use App\Http\Controllers\API\v1\Seller\AuthController as SellerAuthController;
 use App\Http\Controllers\API\v1\Seller\ProfileController as SellerProfileController;
 use App\Http\Controllers\API\v1\Seller\ShopController as SellerShopController;
@@ -34,6 +35,12 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::group(['prefix' => 'v1/customer'], function(){
     Route::post('/register', [CustomerAuthController::class,'register']);
     Route::post('/login',[CustomerAuthController::class,'login']);
+
+    // Guest Area
+    Route::get('shops/',[CustomerShopController::class,'index']);
+    Route::get('shops/{id}/', [CustomerShopController::class, 'show']);
+
+    Route::get('shops/{id}/products',[CustomerShopController::class,'products']);
 
     Route::group(['middleware' => ['auth:customer-api']], function(){
         Route::resource('customer_addresses', CustomerAddressController::class);
