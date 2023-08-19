@@ -6,6 +6,9 @@ use App\Http\Controllers\API\v1\Customer\AuthController as CustomerAuthControlle
 use App\Http\Controllers\API\v1\Customer\CustomerAddressController;
 use App\Http\Controllers\API\v1\Customer\CustomerWalletController;
 use App\Http\Controllers\API\v1\Customer\ShopController as CustomerShopController;
+use App\Http\Controllers\API\v1\Customer\ProductController as CustomerProductController;
+use App\Http\Controllers\API\v1\Customer\CategoryController as CustomerCategoryController;
+use App\Http\Controllers\API\v1\Customer\SearchController as CustomerSearchController;
 use App\Http\Controllers\API\v1\Seller\AuthController as SellerAuthController;
 use App\Http\Controllers\API\v1\Seller\ProfileController as SellerProfileController;
 use App\Http\Controllers\API\v1\Seller\ShopController as SellerShopController;
@@ -41,6 +44,12 @@ Route::group(['prefix' => 'v1/customer'], function(){
     Route::get('shops/{id}/', [CustomerShopController::class, 'show']);
 
     Route::get('shops/{id}/products',[CustomerShopController::class,'products']);
+
+    Route::resource('products', CustomerProductController::class)->only(['index','show']);
+    // similar, reviews
+
+    Route::get('categories',[CustomerCategoryController::class,'index']);
+    Route::get('search', [CustomerSearchController::class,'index']);
 
     Route::group(['middleware' => ['auth:customer-api']], function(){
         Route::resource('customer_addresses', CustomerAddressController::class);
