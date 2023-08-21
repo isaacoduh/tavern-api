@@ -18,8 +18,8 @@ return new class extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
-            // $table->integer('otp');
-            // $table->string('invoice_otp');
+            $table->integer('otp');
+            $table->string('invoice_otp');
             $table->boolean('complete')->default(false);
             $table->timestamp('ready_at')->nullable();
             $table->string('notes')->nullable();
