@@ -4,11 +4,14 @@ namespace App\Http\Controllers\API\v1\Customer;
 
 use App\Http\Controllers\Controller;
 use App\Models\Customer;
+use App\Traits\ApiResponder;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
+    use ApiResponder;
     public function register(Request $request)
     {
         $validated_data = $this->validate($request, [
@@ -40,12 +43,12 @@ class AuthController extends Controller
         if($customer){
             if(Hash::check($validated_data['password'], $customer->password)){
                 $token = $customer->createToken('plaintexttoken');
-                return response()->json(['customer' => $customer, 'token' => $token->plainTextToken]);
+                return $this->successResponse(['customer' => $customer, 'token' => $token->plainTextToken], 'Login Successful');
             } else {
-                return response()->json(['error' => 'Password is Incorrect']);
+                return $this->errorResponse('Password is Incorrect', JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
             }
         } else {
-            return response()->json(['email' => 'This email does not exists!']);
+            return $this->errorResponse('Email is incorrect', JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
         }
 
     }
