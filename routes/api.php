@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\API\v1\LocationController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\v1\Customer\AuthController as CustomerAuthController;
@@ -36,6 +37,11 @@ use App\Http\Controllers\API\v1\Admin\CategoryController as AdminCategoryControl
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::get("v1/utils/get-countries-list", [LocationController::class, 'getAllCountries']);
+Route::get("v1/utils/get-states-by-country/{country_id}", [LocationController::class, 'getStatesByCountryId']);
+Route::get("v1/utils/get-cities-by-state/{state_id}", [LocationController::class, 'getCitiesByState']);
+
 
 Route::group(['prefix' => 'v1/customer'], function(){
     Route::post('/register', [CustomerAuthController::class,'register']);
