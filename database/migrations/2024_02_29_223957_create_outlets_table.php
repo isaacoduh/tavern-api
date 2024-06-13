@@ -21,6 +21,9 @@ return new class extends Migration
             $table->string('contact_person')->nullable();
             $table->string('imageUrl')->nullable();
             $table->boolean('active')->default(false);
+            $table->boolean('delivery_available')->default(false);
+            $table->bigInteger('delivery_estimate_min')->nullable();
+            $table->bigInteger('delivery_estimate_max')->nullable();
             $table->unsignedInteger('city_id')->nullable();
             $table->foreignId('seller_id')->references('id')->on('sellers')->onDelete('cascade');
             $table->foreign('city_id')->references('id')->on('cities')->onUpdate('cascade')->onDelete('cascade');
