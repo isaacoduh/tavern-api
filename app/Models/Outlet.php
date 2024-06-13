@@ -15,4 +15,12 @@ class Outlet extends Model
     {
         return $this->belongsTo(Seller::class);
     }
+
+    public function city() {
+        return $this->belongsTo(City::class);
+    }
+
+    public function scopeActive($query){
+        return $query->where('active', true);
+    }
 }
