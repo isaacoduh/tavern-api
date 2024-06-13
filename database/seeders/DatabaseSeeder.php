@@ -25,6 +25,8 @@ class DatabaseSeeder extends Seeder
             CitiesTableSeeder::class,
             CustomerTableSeeder::class,
             AdminTableSeeder::class,
+            SellersTableSeeder::class,
+            OutletsTableSeeder::class,
         ]);
     }
 }

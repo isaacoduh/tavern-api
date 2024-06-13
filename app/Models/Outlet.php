@@ -15,4 +15,8 @@ class Outlet extends Model
     {
         return $this->belongsTo(Seller::class);
     }
+
+    public function city() {
+        return $this->belongsTo(City::class);
+    }
 }

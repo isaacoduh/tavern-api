@@ -21,8 +21,11 @@ return new class extends Migration
             $table->string('contact_person')->nullable();
             $table->string('imageUrl')->nullable();
             $table->boolean('active')->default(false);
+            $table->unsignedInteger('city_id')->nullable();
             $table->foreignId('seller_id')->references('id')->on('sellers')->onDelete('cascade');
+            $table->foreign('city_id')->references('id')->on('cities')->onUpdate('cascade')->onDelete('cascade');
             $table->timestamps();
+
         });
     }
 
