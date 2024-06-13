@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\API\v1\Customer\OutletController as CustomerOutletController;;
 use App\Http\Controllers\API\v1\LocationController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -51,6 +52,8 @@ Route::group(['prefix' => 'v1/customer'], function(){
     Route::get('shops/',[CustomerShopController::class,'index']);
     Route::get('shops/{id}/', [CustomerShopController::class, 'show']);
 
+
+
     Route::get('shops/{id}/products',[CustomerShopController::class,'products']);
 
     Route::resource('products', CustomerProductController::class)->only(['index','show']);
@@ -59,6 +62,7 @@ Route::group(['prefix' => 'v1/customer'], function(){
     Route::get('categories',[CustomerCategoryController::class,'index']);
     Route::get('search', [CustomerSearchController::class,'index']);
 
+    Route::get('outlets/', [CustomerOutletController::class,'index']);
     Route::group(['middleware' => ['auth:customer-api']], function(){
         Route::resource('customer_addresses', CustomerAddressController::class);
         Route::patch('customer_addresses/{id}/selected/',[CustomerAddressController::class,'selected']);

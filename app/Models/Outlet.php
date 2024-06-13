@@ -19,4 +19,8 @@ class Outlet extends Model
     public function city() {
         return $this->belongsTo(City::class);
     }
+
+    public function scopeActive($query){
+        return $query->where('active', true);
+    }
 }
