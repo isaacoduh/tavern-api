@@ -63,6 +63,7 @@ Route::group(['prefix' => 'v1/customer'], function(){
     Route::get('search', [CustomerSearchController::class,'index']);
 
     Route::get('outlets/', [CustomerOutletController::class,'index']);
+    Route::get('outlets/{id}/', [CustomerOutletController::class, 'show']);
     Route::group(['middleware' => ['auth:customer-api']], function(){
         Route::resource('customer_addresses', CustomerAddressController::class);
         Route::patch('customer_addresses/{id}/selected/',[CustomerAddressController::class,'selected']);
