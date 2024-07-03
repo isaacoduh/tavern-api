@@ -3,6 +3,7 @@
 use App\Models\Customer;
 use App\Models\CustomerAddress;
 use App\Models\Shop;
+use App\Models\Outlet;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -50,8 +51,9 @@ return new class extends Migration
             $table->double('shop_revenue_amount')->default(0);
 
             $table->foreignIdFor(Customer::class)->constrained()->cascadeOnDelete();
-            $table->foreignIdFor(Shop::class)->constrained()->cascadeOnDelete();
-            $table->foreignIdFor(CustomerAddress::class)->nullable()->constrained()->nullOnDelete();
+            // $table->foreignIdFor(Shop::class)->constrained()->cascadeOnDelete();
+            // $table->foreignIdFor(CustomerAddress::class)->nullable()->constrained()->nullOnDelete();
+            $table->foreignIdFor(Outlet::class)->nullable()->constrained()->nullOnDelete();
 
             // coupon, deliveryboy, assign_delivery
 

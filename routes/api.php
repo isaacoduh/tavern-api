@@ -11,6 +11,7 @@ use App\Http\Controllers\API\v1\Customer\ShopController as CustomerShopControlle
 use App\Http\Controllers\API\v1\Customer\ProductController as CustomerProductController;
 use App\Http\Controllers\API\v1\Customer\CategoryController as CustomerCategoryController;
 use App\Http\Controllers\API\v1\Customer\SearchController as CustomerSearchController;
+use App\Http\Controllers\API\v1\Customer\OrderController as CustomerOrderController;
 use App\Http\Controllers\API\v1\Customer\CartController;
 use App\Http\Controllers\API\v1\Seller\AuthController as SellerAuthController;
 use App\Http\Controllers\API\v1\Seller\ProfileController as SellerProfileController;
@@ -71,6 +72,7 @@ Route::group(['prefix' => 'v1/customer'], function(){
         Route::resource('wallets',CustomerWalletController::class);
 
         Route::resource('carts',CartController::class);
+        Route::resource('orders', CustomerOrderController::class);
     });
 });
 
