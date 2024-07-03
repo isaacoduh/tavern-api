@@ -23,6 +23,10 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->string('slug');
 
+            // table options
+            $table->float('price');
+            $table->float('discount')->default(0);
+
             $table->time('available_from')->nullable();
             $table->time('available_to')->nullable();
 
@@ -31,8 +35,8 @@ return new class extends Migration
             $table->bigInteger('ratings_count')->default(0);
             $table->bigInteger('selling_count')->default(0);
 
-            $table->foreignIdFor(Shop::class)->constrained()->cascadeOnDelete();
-            $table->foreignIdFor(Category::class)->constrained()->cascadeOnDelete();
+            // $table->foreignIdFor(Shop::class)->constrained()->cascadeOnDelete();
+            // $table->foreignIdFor(Category::class)->constrained()->cascadeOnDelete();
 
             $table->foreignIdFor(Outlet::class)->constrained()->cascadeOnDelete();
             

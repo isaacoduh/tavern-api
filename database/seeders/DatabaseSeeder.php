@@ -27,6 +27,7 @@ class DatabaseSeeder extends Seeder
             AdminTableSeeder::class,
             SellersTableSeeder::class,
             OutletsTableSeeder::class,
+            ProductsTableSeeder::class
         ]);
     }
 }
