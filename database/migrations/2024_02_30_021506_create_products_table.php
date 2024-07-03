@@ -30,6 +30,8 @@ return new class extends Migration
             $table->time('available_from')->nullable();
             $table->time('available_to')->nullable();
 
+            $table->string('image_url')->nullable();
+
             $table->double('rating')->default(0);
             $table->bigInteger('ratings_total')->default(0);
             $table->bigInteger('ratings_count')->default(0);

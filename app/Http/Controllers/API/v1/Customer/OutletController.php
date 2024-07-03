@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API\v1\Customer;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Outlet;
+use App\Models\Product;
 
 class OutletController extends Controller
 {
@@ -45,5 +46,11 @@ class OutletController extends Controller
         ];
 
         return response()->json(['success' => true, 'data' => $outletData]);
+    }
+
+    public function products(Request $request, $id) {
+        $products = Product::select('id','name','price','image_url')->where('outlet_id', $id)->get();
+        return response()->json(['success' => true, 'data' => $products]);
+
     }
 }
