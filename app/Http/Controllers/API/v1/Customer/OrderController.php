@@ -14,6 +14,11 @@ use Illuminate\Support\Facades\DB;
 
 class OrderController extends Controller
 {
+    public function index(Request $request){
+        $orders = Order::select(['*'])->where('customer_id', $request->user()->id)->orderByDesc('updated_at')->get();
+        return response()->json(['success' => true, 'data' => $orders]);
+    }
+
     public function store(Request $request)
     {
         // $order_validated_data = $this->validate($request, [
@@ -76,8 +81,35 @@ class OrderController extends Controller
         });
 
         $order->loadAll();
-
         return response()->json(['success' => true, 'order' => $order]);
+    }
+
+    public function show(Request $request, $id) {
+        $order = Order::with('order_items','outlet')->where('customer_id', $request->user()->id)->findOrFail($id);
+        $data = [];
+        $orderInfo = [
+            'id' => $order->id,
+            'otp' => $order->otp,
+            'delivery' => $order->order_type,
+            'total' => $order->total,
+        ];
+        $orderItems = [];
+        foreach ($order->order_items as $item) {
+            $orderItems[] = [
+                'id' => $item->id,
+                'name' => $item->product->name,
+                'price' => $item->price,
+                'quantity' => $item->quantity
+            ];
+        }
+
+        $outletInfo = [
+            'outlet_name' => $order->outlet->outlet_name
+        ];
+        $data['order'] = $orderInfo;
+        $data['order']['order_items'] = $orderItems;
+        $data['order']['outlet'] = $outletInfo;
+        return response()->json(['success' => true, 'order' => $data]);
     }
 
 }

@@ -15,12 +15,12 @@ class Order extends Model
 
     public static function withAll()
     {
-        return static::with(['address','customer','shop']);
+        return static::with(['address','customer','outlet']);
     }
 
     public  function loadAll()
     {
-        return $this->load(['address','customer','shop']);
+        return $this->load(['address','customer','outlet']);
     }
 
     public function shop()
@@ -41,6 +41,16 @@ class Order extends Model
     public function customer()
     {
         return $this->belongsTo(Customer::class);
+    }
+
+    public function outlet()
+    {
+        return $this->belongsTo(Outlet::class);
+    }
+
+    public function order_items()
+    {
+        return $this->hasMany(OrderItem::class, 'order_id','id');
     }
 
     protected static function boot()
