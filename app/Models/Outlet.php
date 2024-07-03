@@ -23,4 +23,11 @@ class Outlet extends Model
     public function scopeActive($query){
         return $query->where('active', true);
     }
+
+    // attach owner?
+
+    public function products()
+    {
+        return $this->hasMany(Product::class);
+    }
 }

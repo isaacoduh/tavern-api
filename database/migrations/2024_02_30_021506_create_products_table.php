@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Outlet;
 use App\Models\Shop;
 use App\Models\Category;
 use Illuminate\Database\Migrations\Migration;
@@ -32,6 +33,8 @@ return new class extends Migration
 
             $table->foreignIdFor(Shop::class)->constrained()->cascadeOnDelete();
             $table->foreignIdFor(Category::class)->constrained()->cascadeOnDelete();
+
+            $table->foreignIdFor(Outlet::class)->constrained()->cascadeOnDelete();
             
             $table->timestamps();
         });

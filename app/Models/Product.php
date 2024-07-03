@@ -38,6 +38,10 @@ class Product extends Model
         return $this->belongsTo(Shop::class);
     }
 
+    public function outlet()
+    {
+        return $this->belongsTo(Outlet::class);
+    }
 
     public function category()
     {
