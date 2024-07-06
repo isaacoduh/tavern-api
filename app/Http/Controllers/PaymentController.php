@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Customer;
+use App\Models\CustomerWallet;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Stripe\Stripe;
@@ -36,26 +38,25 @@ class PaymentController extends Controller
         }
 
         if($event->type === 'charge.succeeded'){
-            $paymentInfo = [];
-
             $object = $event->data->object;
             $order_id = $object->metadata->order_id;
             $order = Order::find($order_id);
-
-            $paymentInfo['metadata'] = $object->metadata;
-
-            Log::channel('daily')->info('...payment info', $paymentInfo);
-
+            
             if ($order) {
                     $order->payment_status = 'paid';
-                $order->status = 'payment_done';
+                    $order->status = 'payment_done';
                     $order->save();
                     Log::channel('daily')->info('Order updated to paid', ['order_id' => $order_id]);
-                } else {
+            } else {
                     // Log::channel('daily')->warning('Order not found for payment intent', ['payment_intent' => $paymentIntent]);
+            }
+            if($object->metadata->payment_for === 'wallet_topup'){
+                $customerWallet = CustomerWallet::find($object->metadata->wallet_id);
+                $amount = $object['amount'] / 100;
+                $customerWallet->balance += $amount;
+                $customerWallet->save();
+                Log::channel('daily')->info('Wallet TopUp Complete', ['wallet_id' => $object->metadata->wallet_id, 'amount' => $object['amount'], 'wallet' => $customerWallet]);
                 }
-        }
-
-        Log::channel('daily')->info('Received Webhooks for Stripe', $data);
+        }  
     }
 }

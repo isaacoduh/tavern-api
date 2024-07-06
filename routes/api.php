@@ -72,6 +72,7 @@ Route::group(['prefix' => 'v1/customer'], function(){
         Route::resource('customer_addresses', CustomerAddressController::class);
         Route::patch('customer_addresses/{id}/selected/',[CustomerAddressController::class,'selected']);
         Route::resource('wallets',CustomerWalletController::class);
+        Route::post('wallets/topup', [CustomerWalletController::class, 'topupWallet']);
 
         Route::resource('carts',CartController::class);
         Route::resource('orders', CustomerOrderController::class);
