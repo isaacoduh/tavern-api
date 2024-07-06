@@ -137,8 +137,8 @@ class OrderController extends Controller
         try {
             $order = Order::where([['id', $id], ['customer_id', $request->user()->id]])->findOrFail($id);
         
-            if($order->payment_type !== 'card' && $order->payment_status !== 'unpaid'){
-                return response()->json(['success' => false, 'message' => 'Error Making Payment']);
+            if($order->payment_type !== 'card' || $order->payment_status !== 'unpaid'){
+                return response()->json(['success' => false, 'message' => 'The payment type is wallet! Cannot make payment with card']);
             }
 
             Stripe::setApiKey(env('STRIPE_SECRET'));
@@ -222,6 +222,45 @@ class OrderController extends Controller
         } catch (Exception $e) {
             return response()->json(['success' => false, 'message' => $e->getMessage()]);
         }
+
+    }
+
+    public function invoice(Request $request, $id) {
+        $invoice_otp = $request->query->get('i_otp');
+        $order = Order::withAll()->where('invoice_otp', $invoice_otp)->findOrFail($id);
+        return response()->json(['success' => true, 'order' => $order]);
+    }
+
+    public function cancel(Request $request, $id)
+    {
+        $order = Order::where('customer_id', $request->user()->id)->findOrFail($id);
+
+        if($order->status === 'order_placed' || $order->status === 'payment_done'){
+            $order->status = 'cancelled_by_customer';
+            
+            $wallet = CustomerWallet::where('customer_id', $request->user()->id)->first();
+            $amount = $order->total_payment;
+            DB::transaction(function () use ($order, $wallet, $amount) {
+                if ($order->payment_status == 'paid') {
+                    $order->payment_status = 'unpaid';
+                    $transaction = new CustomerWalletTransaction();
+                    $transaction->added = true;
+                    $transaction->amount = $amount;
+                    $transaction->customer_wallet_id = $wallet->id;
+                    $transaction->order_id = $order->id;
+                    $wallet->balance = $wallet->balance + $amount;
+                    $transaction->save();
+                }
+                $order->save();
+                $wallet->save();
+            });
+
+            // send order notification update to user
+            return response()->json(['success' => true, 'message' => 'Order Cancelled']);
+        
+        }
+
+        return response()->json(['success' => false, 'message' => 'The order cannot be cancelled'], 500);
 
     }
 
