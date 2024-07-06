@@ -43,7 +43,8 @@ class OrderController extends Controller
             'order_type' => ['in:delivery, self_pickup'],
             'order_amount' => ['required','numeric', 'min:0'],
             'total' => ['required', 'numeric', 'min:0'],
-            'payment_type' => ['in:cash_on_delivery,wallet,card']
+            'payment_type' => ['in:cash_on_delivery,wallet,card'],
+            'customer_address_id' => ['required']
         ]);
 
         $customer_id = $order_validated_data['customer_id'];
@@ -72,6 +73,13 @@ class OrderController extends Controller
 
         $order->customer_id = $customer_id;
         $order->outlet_id = $outlet_id;
+
+
+            $customer_address_id = $order_validated_data['customer_address_id'];
+            $customer_address = CustomerAddress::findOrFail($order_validated_data['customer_address_id']);
+
+            $order->customer_address_id = $customer_address->id;
+        
 
         DB::transaction(function () use ($request, $total, $items, $order) {
             $order->save();

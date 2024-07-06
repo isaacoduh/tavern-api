@@ -62,7 +62,7 @@ return new class extends Migration
 
             $table->foreignIdFor(Customer::class)->constrained()->cascadeOnDelete();
             // $table->foreignIdFor(Shop::class)->constrained()->cascadeOnDelete();
-            // $table->foreignIdFor(CustomerAddress::class)->nullable()->constrained()->nullOnDelete();
+            $table->foreignIdFor(CustomerAddress::class)->nullable()->constrained()->nullOnDelete();
             $table->foreignIdFor(Outlet::class)->nullable()->constrained()->nullOnDelete();
 
             // coupon, deliveryboy, assign_delivery
