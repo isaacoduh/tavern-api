@@ -9,8 +9,12 @@ use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Outlet;
 use App\Models\Shop;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Stripe\Checkout\Session;
+use Stripe\Stripe;
+
 
 class OrderController extends Controller
 {
@@ -21,7 +25,8 @@ class OrderController extends Controller
 
     public function store(Request $request)
     {
-        // $order_validated_data = $this->validate($request, [
+        try {
+                    // $order_validated_data = $this->validate($request, [
         //     'customer_id' => ['required'],
         //     'shop_id' => ['required', 'exists:shops,id'],
         //     'order_type' => ['in:delivery,self_pickup'],
@@ -37,7 +42,8 @@ class OrderController extends Controller
             'outlet_id' => ['required', 'exists:outlets,id'],
             'order_type' => ['in:delivery, self_pickup'],
             'order_amount' => ['required','numeric', 'min:0'],
-            'total' => ['required', 'numeric', 'min:0']
+            'total' => ['required', 'numeric', 'min:0'],
+            'payment_type' => ['in:cash_on_delivery,wallet,card']
         ]);
 
         $customer_id = $order_validated_data['customer_id'];
@@ -59,8 +65,10 @@ class OrderController extends Controller
 
         $total = $order_amount + $tax;
         $order->order_type = $order_validated_data['order_type'];
+        $order->payment_type = $order_validated_data['payment_type'];
         $order->order_amount = $order_amount;
         $order->total = $total;
+        $order->total_payment = $total; // this is for payment processor
 
         $order->customer_id = $customer_id;
         $order->outlet_id = $outlet_id;
@@ -82,6 +90,9 @@ class OrderController extends Controller
 
         $order->loadAll();
         return response()->json(['success' => true, 'order' => $order]);
+        } catch (Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()]);
+        }
     }
 
     public function show(Request $request, $id) {
@@ -110,6 +121,49 @@ class OrderController extends Controller
         $data['order']['order_items'] = $orderItems;
         $data['order']['outlet'] = $outletInfo;
         return response()->json(['success' => true, 'order' => $data]);
+    }
+
+    public function pay(Request $request, $id) {
+        try {
+            $order = Order::where([['id', $id], ['customer_id', $request->user()->id]])->findOrFail($id);
+        
+            if($order->payment_type !== 'card' && $order->payment_status !== 'unpaid'){
+                return response()->json(['success' => false, 'message' => 'Error Making Payment']);
+            }
+
+            Stripe::setApiKey(env('STRIPE_SECRET'));
+
+            $session = Session::create([
+                'payment_method_types' => ['card'],
+                'client_reference_id' => 1,
+                'line_items' => [
+                    [
+                        'price_data' => [
+                            'currency' => 'gbp',
+                            'unit_amount' => ($order->total_payment) * 100,
+                            'product_data' => ['name' => $order->outlet->outlet_name],
+                           
+                        ],
+                        'quantity' => 1
+                    ]
+                ],
+                'payment_intent_data' => [
+                    'metadata' => [
+                        'customer_id' => $request->user()->id,
+                        'order_id' => $order->id,
+                        'payment_for' => 'order_placed'
+                    ]
+                ],
+                'mode' => 'payment',
+                'success_url' => route('payments.success'),
+                'cancel_url' => route('payments.success')
+            ]);
+
+            return response()->json(['success' => true, 'checkout_url' => $session->url]);
+        } catch (Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()]);
+        }
+
     }
 
 }

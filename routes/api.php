@@ -24,6 +24,7 @@ use App\Http\Controllers\API\v1\Admin\CustomerController as AdminCustomerControl
 use App\Http\Controllers\API\v1\Admin\SellerController as AdminSellerController;
 use App\Http\Controllers\API\v1\Admin\ShopController as AdminShopController;
 use App\Http\Controllers\API\v1\Admin\CategoryController as AdminCategoryController;
+use App\Http\Controllers\PaymentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -44,6 +45,7 @@ Route::get("v1/utils/get-countries-list", [LocationController::class, 'getAllCou
 Route::get("v1/utils/get-states-by-country/{country_id}", [LocationController::class, 'getStatesByCountryId']);
 Route::get("v1/utils/get-cities-by-state/{state_id}", [LocationController::class, 'getCitiesByState']);
 
+Route::post('s/webhook', [PaymentController::class,'handleStripeWebhook']);
 
 Route::group(['prefix' => 'v1/customer'], function(){
     Route::post('/register', [CustomerAuthController::class,'register']);
@@ -73,6 +75,9 @@ Route::group(['prefix' => 'v1/customer'], function(){
 
         Route::resource('carts',CartController::class);
         Route::resource('orders', CustomerOrderController::class);
+
+        // Pay for Order
+        Route::post('/orders/{id}/pay', [CustomerOrderController::class, 'pay']);
     });
 });
 
