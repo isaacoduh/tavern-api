@@ -185,6 +185,10 @@ class OrderController extends Controller
             if($order->payment_type !== 'wallet') {
                 return response()->json(['success' => false, 'message' => 'The payment selected for this order is not wallet']);
             }
+
+            if($order->payment_status === 'paid'){
+                return response()->json(['success' => false, 'message' => 'The order is already paid'], 500);
+            }
             $wallet = CustomerWallet::where('customer_id', $request->user()->id)->first();
 
             if($wallet->balance < $order->total_payment){
