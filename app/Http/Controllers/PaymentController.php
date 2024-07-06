@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Customer;
 use App\Models\CustomerWallet;
+use App\Models\CustomerWalletTransaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Stripe\Stripe;
@@ -54,7 +55,19 @@ class PaymentController extends Controller
                 $customerWallet = CustomerWallet::find($object->metadata->wallet_id);
                 $amount = $object['amount'] / 100;
                 $customerWallet->balance += $amount;
-                $customerWallet->save();
+                
+
+                $transaction = new CustomerWalletTransaction();
+                $transaction->amount = $amount;
+                $transaction->added = true;
+                $transaction->customer_wallet_id = $customerWallet->id;
+                $transaction->payment_method = CustomerWalletTransaction::$stripe_method;
+
+                \DB::transaction(function () use ($transaction, $customerWallet) {
+                    $customerWallet->save();
+                    $transaction->save();
+                });
+                
                 Log::channel('daily')->info('Wallet TopUp Complete', ['wallet_id' => $object->metadata->wallet_id, 'amount' => $object['amount'], 'wallet' => $customerWallet]);
                 }
         }  

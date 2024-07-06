@@ -13,7 +13,7 @@ class CustomerWalletController extends Controller
 {
     public function index(Request $request)
     {
-        $wallet = CustomerWallet::where('customer_id',$request->user()->id)->first();
+        $wallet = CustomerWallet::with(['transactions'])->where('customer_id',$request->user()->id)->first();
         return response()->json(['success' => true, 'wallet' => $wallet]);
     }
 
