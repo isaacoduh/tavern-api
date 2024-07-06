@@ -5,6 +5,8 @@ namespace App\Http\Controllers\API\v1\Customer;
 use App\Http\Controllers\Controller;
 use App\Models\Cart;
 use App\Models\CustomerAddress;
+use App\Models\CustomerWallet;
+use App\Models\CustomerWalletTransaction;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Outlet;
@@ -168,6 +170,51 @@ class OrderController extends Controller
             ]);
 
             return response()->json(['success' => true, 'checkout_url' => $session->url]);
+        } catch (Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()]);
+        }
+
+    }
+
+    public function payWithWallet(Request $request, $id) 
+    {
+        try {
+            $order = Order::where('customer_id', $request->user()->id)->findOrFail($id);
+
+            // check if payment type is wallet
+            if($order->payment_type !== 'wallet') {
+                return response()->json(['success' => false, 'message' => 'The payment selected for this order is not wallet']);
+            }
+            $wallet = CustomerWallet::where('customer_id', $request->user()->id)->first();
+
+            if($wallet->balance < $order->total_payment){
+                return response()->json(['success' => false, 'message' => 'You do not have enough money in wallet']);
+            }
+
+            $amount = $order->total_payment; 
+
+            
+            if($wallet->balance >= $order->total_payment){
+                $transaction = new CustomerWalletTransaction();
+                $transaction->added = false;
+                $transaction->amount = $amount;
+                $transaction->customer_wallet_id = $wallet->id;
+                $transaction->order_id = $order->id;
+                $wallet->balance = $wallet->balance - $amount;
+
+                $order->payment_status = 'paid';
+                $order->status = 'payment_done';
+
+                DB::transaction(function () use ($order, $wallet, $transaction) {
+                    $transaction->save();
+                    $wallet->save();
+                    $order->save();
+                });
+
+            }
+
+            // send payment notification to seller
+            return response()->json(['success' => true, 'order' => $order->loadAll()]);
         } catch (Exception $e) {
             return response()->json(['success' => false, 'message' => $e->getMessage()]);
         }

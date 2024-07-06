@@ -79,6 +79,7 @@ Route::group(['prefix' => 'v1/customer'], function(){
 
         // Pay for Order
         Route::post('/orders/{id}/pay', [CustomerOrderController::class, 'pay']);
+        Route::post('/orders/{id}/pay/wallet', [CustomerOrderController::class, 'payWithWallet']);
     });
 });
 
