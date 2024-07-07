@@ -1,10 +1,11 @@
 <?php
 
-use App\Http\Controllers\API\v1\Customer\OutletController as CustomerOutletController;;
+use App\Http\Controllers\API\v1\Customer\OutletController as CustomerOutletController;
 use App\Http\Controllers\API\v1\LocationController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\v1\Customer\AuthController as CustomerAuthController;
+use App\Http\Controllers\API\v1\Customer\ProfileController as CustomerProfileController;
 use App\Http\Controllers\API\v1\Customer\CustomerAddressController;
 use App\Http\Controllers\API\v1\Customer\CustomerWalletController;
 use App\Http\Controllers\API\v1\Customer\ShopController as CustomerShopController;
@@ -68,7 +69,20 @@ Route::group(['prefix' => 'v1/customer'], function(){
     Route::get('outlets/', [CustomerOutletController::class,'index']);
     Route::get('outlets/{id}/', [CustomerOutletController::class, 'show']);
     Route::get('outlets/{id}/products', [CustomerOutletController::class, 'products']);
-    Route::group(['middleware' => ['auth:customer-api']], function(){
+    Route::group(['middleware' => ['auth:customer-api']], function () {
+        Route::get('profile/verify_email/', [CustomerProfileController::class, 'verify_email']);
+        Route::post('profile/verify_mobile_number/', [CustomerProfileController::class, 'verify_mobile_number']);
+        Route::post('profile/delete_account', [CustomerProfileController::class, 'delete_account']);
+        Route::post('profile/send_verification_email/', [CustomerProfileController::class, 'send_verification_email']);
+        Route::post('check_mobile_number',[CustomerAuthController::class, 'check_mobile_number']);
+        Route::post('logout', [CustomerAuthController::class, 'logout']);
+
+
+        Route::get('profile/', [CustomerProfileController::class, 'show']);
+        Route::patch('profile/', [CustomerProfileController::class, 'update']);
+        Route::patch('profile/remove_avatar/', [CustomerProfileController::class, 'remove_avatar']);
+
+        
         Route::resource('customer_addresses', CustomerAddressController::class);
         Route::patch('customer_addresses/{id}/selected/',[CustomerAddressController::class,'selected']);
         Route::resource('wallets',CustomerWalletController::class);

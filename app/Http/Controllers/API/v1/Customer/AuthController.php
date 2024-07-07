@@ -52,4 +52,16 @@ class AuthController extends Controller
         }
 
     }
+
+    public function login_via_otp(Request $request)
+    {
+
+    }
+
+    public function send_otp(Request $request)
+    {}
+
+    public function check_mobile_number(Request $request){}
+
+    public function logout(Request $request){}
 }
