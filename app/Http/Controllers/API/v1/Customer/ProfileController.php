@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API\v1\Customer;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Twilio\Rest\Client;
 
 class ProfileController extends Controller
 {
@@ -23,7 +24,22 @@ class ProfileController extends Controller
         return response()->json(['success' => true, 'profile' => $data]);
     }
 
-    public function verify_mobile_number(Request $request){}
+    public function send_mobile_verification(Request $request)
+    {
+        $accountId = env('ACCOUNT_SID');
+        $authToken = env('AUTH_TOKEN');
+        $twilioNumber = env('TWILIO_NUMBER');
+
+        $client = new Client($accountId, $authToken);
+        $client->messages->create($request['mobile_number'], array('from' => $twilioNumber, 'body' => 'I sent this message in under 10 minutes!'));
+
+    }
+    
+    public function verify_mobile_number(Request $request)
+    {
+        return response()->json(['success' => true, 'message' => 'Mobile Number sent!']);
+
+    }
     public function send_verification_email(Request $request){}
 
     public function verify_email(Request $request){}
