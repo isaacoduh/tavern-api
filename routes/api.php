@@ -71,6 +71,7 @@ Route::group(['prefix' => 'v1/customer'], function(){
     Route::get('outlets/{id}/products', [CustomerOutletController::class, 'products']);
     Route::group(['middleware' => ['auth:customer-api']], function () {
         Route::get('profile/verify_email/', [CustomerProfileController::class, 'verify_email']);
+        Route::post('profile/send_verification_otp', [CustomerProfileController::class, 'send_mobile_verification']);
         Route::post('profile/verify_mobile_number/', [CustomerProfileController::class, 'verify_mobile_number']);
         Route::post('profile/delete_account', [CustomerProfileController::class, 'delete_account']);
         Route::post('profile/send_verification_email/', [CustomerProfileController::class, 'send_verification_email']);

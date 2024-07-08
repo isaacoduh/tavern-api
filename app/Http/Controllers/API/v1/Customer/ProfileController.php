@@ -29,9 +29,10 @@ class ProfileController extends Controller
         $accountId = env('ACCOUNT_SID');
         $authToken = env('AUTH_TOKEN');
         $twilioNumber = env('TWILIO_NUMBER');
+        $randomNumber = 102932;
 
         $client = new Client($accountId, $authToken);
-        $client->messages->create($request['mobile_number'], array('from' => $twilioNumber, 'body' => 'I sent this message in under 10 minutes!'));
+        $client->messages->create($request['mobile_number'], array('from' => $twilioNumber, 'body' => 'This is a basic otp.'.$randomNumber.''));
 
     }
     

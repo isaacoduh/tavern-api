@@ -1,5 +1,13 @@
 # Tavern API
 
+## Tools and Technology
+
+-   Laravel
+-   PHP
+-   MySQL
+-   Twilio
+-   Stripe
+
 ### Endpoints
 
 | Endpoint                                           | Method | Description                           |
