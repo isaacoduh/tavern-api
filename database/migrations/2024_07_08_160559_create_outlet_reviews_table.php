@@ -1,8 +1,6 @@
 <?php
 
 use App\Models\Customer;
-use App\Models\Product;
-use App\Models\Shop;
 use App\Models\Outlet;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -17,15 +15,15 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('carts', function (Blueprint $table) {
+        Schema::create('outlet_reviews', function (Blueprint $table) {
             $table->id();
-            $table->integer('quantity')->default(1);
+            $table->smallInteger('rating');
+            $table->string('review')->nullable();
 
             $table->foreignIdFor(Customer::class)->constrained()->cascadeOnDelete();
-            $table->foreignIdFor(Product::class)->constrained()->cascadeOnDelete();
-            // $table->foreignIdFor(Shop::class)->constrained()->cascadeOnDelete();
             $table->foreignIdFor(Outlet::class)->constrained()->cascadeOnDelete();
-            
+
+            $table->unique(['outlet_id', 'customer_id']);
             $table->timestamps();
         });
     }
@@ -37,6 +35,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('carts');
+        Schema::dropIfExists('outlet_reviews');
     }
 };

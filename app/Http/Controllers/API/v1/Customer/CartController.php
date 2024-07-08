@@ -24,7 +24,8 @@ class CartController extends Controller
             'product_id' => ['required']
         ]);
         $product = Product::findOrFail($validated_data['product_id']);
-        $validated_data['shop_id'] = $product->shop_id;
+        // $validated_data['shop_id'] = $product->shop_id;
+        $validated_data['outlet_id'] = $product->outlet_id;
         $validated_data['customer_id'] = $request->user()->id;
 
         $cart = Cart::where('product_id',$product->id)->where('customer_id', $request->user()->id)->first();

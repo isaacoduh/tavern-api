@@ -14,6 +14,7 @@ use App\Http\Controllers\API\v1\Customer\CategoryController as CustomerCategoryC
 use App\Http\Controllers\API\v1\Customer\SearchController as CustomerSearchController;
 use App\Http\Controllers\API\v1\Customer\OrderController as CustomerOrderController;
 use App\Http\Controllers\API\v1\Customer\CartController;
+use App\Http\Controllers\API\v1\Customer\OutletReviewController as CustomerOutletReviewController;
 use App\Http\Controllers\API\v1\Seller\AuthController as SellerAuthController;
 use App\Http\Controllers\API\v1\Seller\ProfileController as SellerProfileController;
 use App\Http\Controllers\API\v1\Seller\ShopController as SellerShopController;
@@ -90,12 +91,19 @@ Route::group(['prefix' => 'v1/customer'], function(){
         Route::post('wallets/topup', [CustomerWalletController::class, 'topupWallet']);
 
         Route::resource('carts',CartController::class);
+
+        Route::get('outlets/{id}/carts', [CustomerOutletController::class, 'carts']);
+        Route::get('outlets/{id}/reviews', [CustomerOutletController::class, 'reviews']);
+
         Route::resource('orders', CustomerOrderController::class);
 
         // Pay for Order
         Route::post('/orders/{id}/pay', [CustomerOrderController::class, 'pay']);
         Route::post('/orders/{id}/pay/wallet', [CustomerOrderController::class, 'payWithWallet']);
         Route::put('/orders/{id}/cancel', [CustomerOrderController::class, 'cancel']);
+
+        Route::post('outlets/{id}/reviews', [CustomerOutletReviewController::class, 'store']);
+        Route::get('outlets/{id}/reviews/me', [CustomerOutletReviewController::class, 'me']);
     });
 });
 

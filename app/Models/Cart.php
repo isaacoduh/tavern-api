@@ -13,12 +13,13 @@ class Cart extends Model
 
     public static function withAll()
     {
-        return static::with(['product','shop']);
+        return static::with(['product','outlet']);
     }
 
     public function loadAll()
     {
-        return $this->load(['product','shop']);
+        // return $this->load(['product','shop']);
+        return $this->load(['product', 'outlet']);
     }
 
     public function getCartTotal()
@@ -37,8 +38,12 @@ class Cart extends Model
         return $this->belongsTo(Product::class);
     }
 
-    public function shop()
-    {
-        return $this->belongsTo(Shop::class);
+    // public function shop()
+    // {
+    //     return $this->belongsTo(Shop::class);
+    // }
+
+    public function outlet() {
+        return $this->belongsTo(Outlet::class);
     }
 }

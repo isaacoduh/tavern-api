@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\API\v1\Customer;
 
 use App\Http\Controllers\Controller;
+use App\Models\Cart;
+use App\Models\OutletReview;
 use Illuminate\Http\Request;
 use App\Models\Outlet;
 use App\Models\Product;
@@ -52,5 +54,18 @@ class OutletController extends Controller
         $products = Product::select('id','name','price','image_url')->where('outlet_id', $id)->get();
         return response()->json(['success' => true, 'data' => $products]);
 
+    }
+
+    public function carts(Request $request, $id)
+    {
+        $carts = Cart::withAll()->where('outlet_id', $id)->where('customer_id', $request->user()->id)->get();
+        return response()->json(['success' => true, 'data' => $carts]);
+    }
+
+    public function reviews(Request $request, $id)
+    {
+        $reviews = OutletReview::with(['outlet', 'customer'])->where('outlet_id', $id)->get();
+
+        return response()->json(['success' => true, 'data' => $reviews]);
     }
 }
