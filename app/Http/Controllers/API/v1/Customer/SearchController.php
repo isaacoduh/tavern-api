@@ -22,10 +22,12 @@ class SearchController extends Controller
 
         $productQuery = Product::withAll()->active();
         $shopQuery = Shop::withAll()->active();
+        $outletQuery = Outlet::withAll()->active();
 
         if(isset($q)){
             $productQuery = $productQuery->where('name','like', "%".$q."%");
             $shopQuery = $shopQuery->where('name','like', "%".$q."%");
+             $outletQuery = $outletQuery->where('name','like', "%".$q."%");
         }
 
         if(isset($categories)){
@@ -33,15 +35,19 @@ class SearchController extends Controller
             $shopQuery->whereHas('categories', function($q) use ($categories){
                 $q->whereIn('id', $categories);
             });
+            $outletQuery->whereHas('categories', function($q) use ($categories){
+                $q->whereIn('id', $categories);
+            });
         }
 
         if(isset($min_rating)){
             $productQuery = $productQuery->where('rating', '>=', $min_rating);
             $shopQuery = $shopQuery->where('rating', '>=', $min_rating);
+            $outletQuery = $outletQuery->where('rating', '>=', $min_rating);
         }
 
         // maxprice with calculated price
 
-        return response()->json(['success' => true, 'products' => $productQuery->get()]);
+        return response()->json(['success' => true, 'products' => $productQuery->get(), 'outlets' => $outletQuery->get()],);
     }
 }
