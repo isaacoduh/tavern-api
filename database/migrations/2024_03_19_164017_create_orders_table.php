@@ -49,6 +49,7 @@ return new class extends Migration
             $table->double('admin_revenue_amount')->default(0);
             $table->double('delivery_boy_revenue_amount')->default(0);
             $table->double('shop_revenue_amount')->default(0);
+            $table->double('outlet_revenue_amount')->default(0);
 
 
             $table->enum('payment_type', ['cash_on_delivery', 'wallet', 'card'])->default('cash_on_delivery');

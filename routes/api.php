@@ -21,6 +21,7 @@ use App\Http\Controllers\API\v1\Seller\ShopController as SellerShopController;
 use App\Http\Controllers\API\v1\Seller\CategoryController as SellerCategoryController;
 use App\Http\Controllers\API\v1\Seller\ProductController as SellerProductController;
 use App\Http\Controllers\API\v1\Seller\OutletController as SellerOutletController;
+use App\Http\Controllers\API\v1\Seller\OrderController as SellerOrderController;
 use App\Http\Controllers\API\v1\Admin\AuthController as AdminAuthController;
 use App\Http\Controllers\API\v1\Admin\CustomerController as AdminCustomerController;
 use App\Http\Controllers\API\v1\Admin\SellerController as AdminSellerController;
@@ -124,6 +125,12 @@ Route::group(['prefix' => 'v1/seller'], function(){
         // product images
         // product options
         // product reviews
+
+        Route::resource('orders', SellerOrderController::class)->only(['index','show']);
+        Route::patch('orders/{id}/cancel', [SellerOrderController::class, 'cancel']);
+        Route::patch('orders/{id}/reject', [SellerOrderController::class, 'reject']);
+        Route::patch('orders/{id}/accept', [SellerOrderController::class, 'accept']);
+        Route::patch('orders/{id}/deliver', [SellerOrderController::class, 'deliver']);
 
     });
 });
